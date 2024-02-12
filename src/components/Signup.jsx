@@ -21,7 +21,7 @@ const Signup = () => {
         if (userData) {
           dispatch(login(userData));
         }
-        navigate("/");
+        navigate("/all-posts");
       }
     } catch (error) {
       setError(error.message);
@@ -53,28 +53,28 @@ const Signup = () => {
         <form onSubmit={handleSubmit(create)}>
           <div className="space-y-5">
             <Input
-              label="Email: "
-              placeholder="Enter your nsme"
+              label="Name : "
+              placeholder="Enter your name..."
               {...register("name", {
                 required: true,
               })}
             />
             <Input
-              label="Email: "
-              placeholder="Enter your email"
+              label="Email : "
+              placeholder="Enter your email..."
               type="email"
               {...register("email", {
                 required: true,
                 validate: {
                   matchPattern: (value) =>
-                    /^\w+([.-+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
                       value
                     ) || "Email address must be validated",
                 },
               })}
             />
             <Input
-              label="Password: "
+              label="Password : "
               type="password"
               placeholder="Enter your password..."
               {...register("password", {

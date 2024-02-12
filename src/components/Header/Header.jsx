@@ -2,7 +2,6 @@ import React from "react";
 import { Container, Logo, LogoutBtn } from "../index";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { logout, login } from "../../store/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
@@ -32,6 +31,7 @@ const Header = () => {
       active: authStatus,
     },
   ];
+
   return (
     <header className="py-3 shadow bg-gray-500">
       <Container>
@@ -54,13 +54,11 @@ const Header = () => {
                 </li>
               ) : null
             )}
-            {
-              authStatus && (
-                <li>
-                  <LogoutBtn />
-                </li>
-              ) 
-            }
+            {authStatus && (
+              <li>
+                <LogoutBtn />
+              </li>
+            )}
           </ul>
         </nav>
       </Container>

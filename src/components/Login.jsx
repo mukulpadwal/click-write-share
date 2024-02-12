@@ -60,7 +60,7 @@ const Login = () => {
                 required: true,
                 validate: {
                   matchPattern: (value) =>
-                    /^\w+([.-+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(
+                    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
                       value
                     ) || "Email address must be validated",
                 },
