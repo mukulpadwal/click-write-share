@@ -5,25 +5,33 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const EditPost = () => {
   const [post, setPost] = useState([]);
-  const slug = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (slug) {
-      databaseService.getPost(slug).then((response) => {
-        if (response) {
-          setPost(response.documents);
-        }
-      });
+      databaseService
+        .getPost(slug)
+        .then((response) => {
+          if (response) {
+            setPost(response);
+          }
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
     } else {
       navigate("/");
     }
   }, [slug, navigate]);
-  return post ? <div className="py-8">
-    <Container>
-        <PostForm post={post} />
-    </Container>
-  </div> : null;
+
+  return (
+    post && (
+      <div className="py-8">
+        <Container>{<PostForm post={post} />}</Container>
+      </div>
+    )
+  );
 };
 
 export default EditPost;

@@ -105,14 +105,14 @@ export class Service {
 
   async deleteFile(fileId) {
     try {
-        await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
-        return true;
+      await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
+      return true;
     } catch (error) {
       throw error;
     }
   }
 
-  getFilePreview(fileId){
+  getFilePreview(fileId) {
     return this.bucket.getFilePreview(conf.appwriteBucketId, fileId);
   }
 }

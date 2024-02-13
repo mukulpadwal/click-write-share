@@ -13,16 +13,19 @@ const RTE = ({ name, control, label, defaulValue = "" }) => {
         render={({ field: { onChange } }) => (
           <Editor
             apiKey={conf.tinyMceApiKey}
-            initialValue="default value"
             init={{
               initialValue: { defaulValue },
               branding: false,
               height: 500,
               menubar: true,
               plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table paste code help wordcount",
+                "advlist",
+                "autolink",
+                "link",
+                "image",
+                "lists",
+                "charmap",
+                "preview",
               ],
               toolbar:
                 "undo redo | formatselect | bold italic backcolor | \

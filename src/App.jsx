@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import "./App.css";
-import {Header, Footer} from "./components"
+import { Header, Footer } from "./components";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
-import login, { logout } from "./store/authSlice";
+import { login, logout } from "./store/authSlice";
 import { Outlet } from "react-router-dom";
 
 function App() {
@@ -15,7 +14,7 @@ function App() {
       .getCurrentUser()
       .then((userData) => {
         if (userData) {
-          dispatch(login({userData} ));
+          dispatch(login({ userData }));
         } else {
           dispatch(logout());
         }

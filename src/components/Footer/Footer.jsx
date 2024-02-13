@@ -14,7 +14,7 @@ const Footer = () => {
                             </div>
                             <div>
                                 <p className="text-sm text-gray-600">
-                                    &copy; Copyright 2023. All Rights Reserved by DevUI.
+                                    &copy; Copyright {new Date().getFullYear()}. All Rights Reserved
                                 </p>
                             </div>
                         </div>
@@ -30,7 +30,7 @@ const Footer = () => {
                                         className=" text-base font-medium text-gray-900 hover:text-gray-700"
                                         to="/"
                                     >
-                                        Features
+                                        Home
                                     </Link>
                                 </li>
                                 <li className="mb-4">
@@ -47,14 +47,6 @@ const Footer = () => {
                                         to="/"
                                     >
                                         Affiliate Program
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Press Kit
                                     </Link>
                                 </li>
                             </ul>
@@ -88,14 +80,6 @@ const Footer = () => {
                                         to="/"
                                     >
                                         Contact Us
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Customer Support
                                     </Link>
                                 </li>
                             </ul>

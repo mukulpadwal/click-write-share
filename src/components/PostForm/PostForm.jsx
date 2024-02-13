@@ -4,7 +4,6 @@ import { Button, Input, RTE, Select } from "../index";
 import databaseService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { data } from "autoprefixer";
 
 const PostForm = ({ post }) => {
   const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -18,16 +17,27 @@ const PostForm = ({ post }) => {
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
     if (post) {
+      console.log("Here I am editing the blog post");
+      console.log("EDITING : ", data);
       // update
       const file = data.image[0]
         ? databaseService.uploadFile(data.image[0])
         : null;
+      console.log(file);
       if (file) {
-        databaseService.deleteFile(post.featuredImage);
+        console.log(post.featuredImage);
+        databaseService
+          .deleteFile(post.featuredImage)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
       }
 
       const dbPost = await databaseService.updatePost(post.$id, {
@@ -60,11 +70,7 @@ const PostForm = ({ post }) => {
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === "string") {
-      return value
-        .trim()
-        .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
+      return value.trim().toLowerCase().replace(/\s/g, "-");
     } else {
       return "";
     }
@@ -105,6 +111,7 @@ const PostForm = ({ post }) => {
         <RTE
           label="Content :"
           name="content"
+          className="mb-4"
           control={control}
           defaultValue={getValues("content")}
         />
@@ -120,7 +127,7 @@ const PostForm = ({ post }) => {
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.featuredImage)}
+              src={databaseService.getFilePreview(post.featuredImage || "")}
               alt={post.title}
               className="rounded-lg"
             />
