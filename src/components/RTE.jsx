@@ -3,7 +3,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Controller } from "react-hook-form";
 import conf from "../conf/conf";
 
-const RTE = ({ name, control, label, defaulValue = "" }) => {
+const RTE = ({ name, control, label, defaultValue = "" }) => {
   return (
     <div className="w-full">
       {label && <label className="inline-blovk mb-1 pl-1">{label}</label>}
@@ -12,9 +12,9 @@ const RTE = ({ name, control, label, defaulValue = "" }) => {
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
+            initialValue={defaultValue}
             apiKey={conf.tinyMceApiKey}
             init={{
-              initialValue: { defaulValue },
               branding: false,
               height: 500,
               menubar: true,

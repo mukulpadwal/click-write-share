@@ -6,32 +6,26 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PostForm = ({ post }) => {
-  const { register, handleSubmit, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        slug: post?.slug || "",
-        content: post?.content || "",
-        status: post?.status || "active",
-      },
-    });
+  const { title, content, $id, status, featuredImage } = post;
+
+  const { register, handleSubmit, watch, setValue, control } = useForm();
 
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
+    console.log(data);
     if (post) {
       console.log("Here I am editing the blog post");
       console.log("EDITING : ", data);
       // update
       const file = data.image[0]
         ? databaseService.uploadFile(data.image[0])
-        : null;
-      console.log(file);
+        : false;
+
       if (file) {
-        console.log(post.featuredImage);
         databaseService
-          .deleteFile(post.featuredImage)
+          .deleteFile(featuredImage)
           .then((response) => {
             console.log(response);
           })
@@ -40,9 +34,9 @@ const PostForm = ({ post }) => {
           });
       }
 
-      const dbPost = await databaseService.updatePost(post.$id, {
-        ...data,
+      const dbPost = await databaseService.updatePost($id, {
         featuredImage: file ? file.$id : undefined,
+        ...data,
       });
 
       if (dbPost) {
@@ -92,12 +86,14 @@ const PostForm = ({ post }) => {
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
       <div className="w-2/3 px-2">
         <Input
+          defaultValue={title || ""}
           label="Title :"
           placeholder="Title"
           className="mb-4"
           {...register("title", { required: true })}
         />
         <Input
+          defaultValue={$id || ""}
           label="Slug :"
           placeholder="Slug"
           className="mb-4"
@@ -109,11 +105,11 @@ const PostForm = ({ post }) => {
           }}
         />
         <RTE
+          defaultValue={content || ""}
           label="Content :"
           name="content"
           className="mb-4"
           control={control}
-          defaultValue={getValues("content")}
         />
       </div>
       <div className="w-1/3 px-2">
@@ -122,12 +118,12 @@ const PostForm = ({ post }) => {
           type="file"
           className="mb-4"
           accept="image/png, image/jpg, image/jpeg, image/gif"
-          {...register("image", { required: !post })}
+          {...register("image", { required: featuredImage ? "false" : "true" })}
         />
         {post && (
           <div className="w-full mb-4">
             <img
-              src={databaseService.getFilePreview(post.featuredImage || "")}
+              src={databaseService.getFilePreview(featuredImage || "")}
               alt={post.title}
               className="rounded-lg"
             />

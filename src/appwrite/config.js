@@ -44,7 +44,7 @@ export class Service {
           title,
           content,
           featuredImage,
-          status,
+          status
         }
       );
     } catch (error) {
@@ -78,7 +78,7 @@ export class Service {
     }
   }
 
-  async getPosts(queries = [Query.equal("status", "active")]) {
+  async getPosts(queries = [Query.equal("status", ["active", "inactive"])]) {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseId,

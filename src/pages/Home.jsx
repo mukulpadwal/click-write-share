@@ -48,14 +48,16 @@ const Home = () => {
       </div>
     );
   }
+  
 
   return (
     <div className="h-screen w-full py-8">
       <Container>
         <div className="flex flex-wrap">
           {posts
-            .filter((post) => post.userId === userData.$id)
+            .filter((post) => post.userId === userData?.$id)
             .map((post) => (
+              
               <div key={post.$id} className="p-2 w-1/4">
                 <PostCard {...post} />
               </div>
