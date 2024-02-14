@@ -7,17 +7,12 @@ const Home = () => {
   const [posts, setPosts] = useState([]);
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
+
   useEffect(() => {
     databaseService
-      .getPosts([])
+      .getPosts()
       .then((response) => {
-        console.log(response);
-        if (response) {
-          const filteredPosts = response.documents.filter((post) => {
-            return post.userId === userData?.$id;
-          });
-          setPosts(filteredPosts);
-        }
+        setPosts(response.documents);
       })
       .catch((error) => {
         console.log(error.message);
@@ -58,11 +53,13 @@ const Home = () => {
     <div className="h-screen w-full py-8">
       <Container>
         <div className="flex flex-wrap">
-          {posts.map((post) => {
-            <div key={post.$id} className="p-2 w-1/4">
-              <PostCard {...post} />
-            </div>;
-          })}
+          {posts
+            .filter((post) => post.userId === userData.$id)
+            .map((post) => (
+              <div key={post.$id} className="p-2 w-1/4">
+                <PostCard {...post} />
+              </div>
+            ))}
         </div>
       </Container>
     </div>
