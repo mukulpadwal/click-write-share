@@ -6,7 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const PostForm = ({ post }) => {
-  const { title, content, $id, status, featuredImage } = post;
+  if (post) {
+    var { title, content, $id, featuredImage } = post;
+  }
 
   const { register, handleSubmit, watch, setValue, control } = useForm();
 
@@ -14,10 +16,7 @@ const PostForm = ({ post }) => {
   const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
-    console.log(data);
     if (post) {
-      console.log("Here I am editing the blog post");
-      console.log("EDITING : ", data);
       // update
       const file = data.image[0]
         ? databaseService.uploadFile(data.image[0])
@@ -27,7 +26,7 @@ const PostForm = ({ post }) => {
         databaseService
           .deleteFile(featuredImage)
           .then((response) => {
-            console.log(response);
+            console.log("file uploaded", response);
           })
           .catch((error) => {
             console.log(error.message);

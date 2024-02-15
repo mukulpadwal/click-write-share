@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [loader, setLoader] = useState(false);
   const authStatus = useSelector((state) => state.auth.status);
   const userData = useSelector((state) => state.auth.userData);
 
@@ -13,6 +14,7 @@ const Home = () => {
       .getPosts()
       .then((response) => {
         setPosts(response.documents);
+        setLoader(true);
       })
       .catch((error) => {
         console.log(error.message);
@@ -33,8 +35,11 @@ const Home = () => {
         </Container>
       </div>
     );
-  } else if (posts.length === 0) {
-    return (
+  } else if (
+    authStatus &&
+    posts.filter((post) => post.userId === userData?.$id).length === 0
+  ) {
+    return loader ? (
       <div className="h-screen w-full py-8 mt-4 text-center">
         <Container>
           <div className="flex flex-wrap">
@@ -46,18 +51,18 @@ const Home = () => {
           </div>
         </Container>
       </div>
+    ) : (
+      <h1>Loading...</h1>
     );
   }
-  
 
-  return (
+  return loader ? (
     <div className="h-screen w-full py-8">
       <Container>
         <div className="flex flex-wrap">
           {posts
             .filter((post) => post.userId === userData?.$id)
             .map((post) => (
-              
               <div key={post.$id} className="p-2 w-1/4">
                 <PostCard {...post} />
               </div>
@@ -65,6 +70,8 @@ const Home = () => {
         </div>
       </Container>
     </div>
+  ) : (
+    <h1>Loading...</h1>
   );
 };
 
