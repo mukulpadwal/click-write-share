@@ -34,6 +34,33 @@ class DatabaseService {
         }
     }
 
+    // Get a single blog
+    async getBlog(slug: string) {
+        try {
+            return await this.databases.getDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug);
+        } catch (error) {
+            console.error(`APPWRITE DB ERROR :: getBlog :: ${error}`);
+        }
+    }
+
+    // Update a blog
+    async editBlog(slug: string, { title, content, thumbnail }: { title: string, content: string, thumbnail: string }) {
+        try {
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, { title: title, content: content, thumbnail: thumbnail });
+        } catch (error) {
+            console.error(`APPWRITE DB ERROR :: editBlog :: ${error}`);
+        }
+    }
+
+    // Delete a blog
+    async deleteBlog(slug: string) {
+        try {
+            return await this.databases.deleteDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug);
+        } catch (error) {
+            console.error(`APPWRITE DB ERROR :: deleteBlog :: ${error}`);
+        }
+    }
+
 }
 
 const databaseService = new DatabaseService();
