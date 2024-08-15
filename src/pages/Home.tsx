@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 
 function Home() {
   const [posts, setPosts] = useState([]);
-  const authStatus = useSelector((state) => state?.auth.isLoggedIn);
+  const authStatus = useSelector((state: any) => state?.auth.isLoggedIn);
 
   useEffect(() => {
-    databaseService.getBlogs().then((posts) => {
+    databaseService.getBlogs().then((posts: any) => {
       if (posts) {
         setPosts(posts?.documents);
       }
@@ -25,7 +25,9 @@ function Home() {
               <Logo className="w-48 sm:w-64 lg:w-96" />
             </div>
             <div className="w-auto flex flex-col justify-center items-center gap-2">
-              <h1 className="text-3xl sm:text-4xl lg:text-7xl font-bold">Click Write Share</h1>
+              <h1 className="text-3xl sm:text-4xl lg:text-7xl font-bold">
+                Click Write Share
+              </h1>
               <h2 className="text-lg lg:text-2xl italic font-semibold">
                 From blank page to the world
               </h2>
@@ -59,7 +61,7 @@ function Home() {
         <div className="w-full py-8">
           <Container>
             <div className="flex-flex-wrap">
-              {posts.map((post) => (
+              {posts.map((post: any) => (
                 <div key={post.$id} className="p-2 w-1/4">
                   <PostCard {...post} />
                 </div>

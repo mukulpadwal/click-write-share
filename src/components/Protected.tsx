@@ -11,7 +11,7 @@ export default function Protected({
 }) {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(true);
-  const authStatus = useSelector((state) => state?.auth.isLoggedIn);
+  const authStatus = useSelector((state: any) => state?.auth.isLoggedIn);
 
 
   useEffect(() => {

@@ -10,7 +10,7 @@ function EditPost() {
 
   useEffect(() => {
     if (slug) {
-      databaseService.getBlog(slug).then((post) => {
+      databaseService.getBlog(slug).then((post: any) => {
         if (post) {
           setPost(post);
         }

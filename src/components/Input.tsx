@@ -1,10 +1,12 @@
-import { forwardRef, useId } from "react";
+import { FormEventHandler, forwardRef, useId } from "react";
 
 interface InputProps {
   label: string;
   type: string;
   className?: string;
   placeholder?: string;
+  accept?: string;
+  onInput?: FormEventHandler | undefined;
   props?: {};
 }
 
@@ -14,6 +16,8 @@ const Input = forwardRef(function Input(
     type = "text",
     className = "",
     placeholder = "",
+    accept = "",
+    onInput,
     ...props
   }: InputProps,
   ref: any
@@ -35,6 +39,8 @@ const Input = forwardRef(function Input(
         ref={ref}
         id={id}
         placeholder={placeholder}
+        accept={accept}
+        onInput={onInput}
         {...props}
       />
     </div>

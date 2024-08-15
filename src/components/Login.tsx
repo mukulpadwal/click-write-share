@@ -13,7 +13,7 @@ function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const authStatus: boolean = useSelector((state) => state?.auth.isLoggedIn);
+  const authStatus: boolean = useSelector((state: any) => state?.auth.isLoggedIn);
 
   const handleLogin = async (data: any) => {
     setError("");

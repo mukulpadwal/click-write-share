@@ -6,7 +6,7 @@ import { MenuSquare, X } from "lucide-react";
 
 function Header() {
   const [mobileMenuClicked, setMobileMenuClicked] = useState<boolean>(false);
-  const authStatus: boolean = useSelector((state) => state?.auth?.isLoggedIn);
+  const authStatus: boolean = useSelector((state: any) => state?.auth?.isLoggedIn);
   const navigate = useNavigate();
 
   const navItems = [

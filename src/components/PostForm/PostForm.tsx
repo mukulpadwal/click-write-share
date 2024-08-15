@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from "react";
-import { set, useForm } from "react-hook-form";
-import { Button, RTE, Input, Select } from "../";
+import { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { RTE, Input } from "../";
 import databaseService from "../../appwrite/database";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -14,13 +14,14 @@ function PostForm({ post }: { post?: any }) {
         slug: post?.slug || "",
         content: post?.content || "",
         status: post?.status || true,
+        image: post?.thumbnailImage || "",
       },
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state?.auth?.userData);
+  const userData = useSelector((state: any) => state?.auth?.userData);
 
-  const handleBlogSubmit = async (data) => {
+  const handleBlogSubmit = async (data: any) => {
     if (post) {
       const thumbnail = data.image[0]
         ? await storageService.uploadThumbnail(data.image[0])
@@ -47,13 +48,13 @@ function PostForm({ post }: { post?: any }) {
         const thumbnailId = thumbnail.$id;
         data.thumbnail = thumbnailId;
 
-        const dbPost = await databaseService.createBlog(data.slug, {
+        const dbPost: any = await databaseService.createBlog(data.slug, {
           ...data,
           userId: userData.$id,
         });
 
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`);
+        if (dbPost !== undefined) {
+          navigate(`/post/${dbPost?.$id}`);
         }
       }
     }
@@ -80,10 +81,14 @@ function PostForm({ post }: { post?: any }) {
   }, [watch, slugTransform, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(handleBlogSubmit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
+    <form
+      onSubmit={handleSubmit(handleBlogSubmit)}
+      className="w-auto h-screen flex flex-col md:flex-row flex-wrap px-3"
+    >
+      <div className="w-full md:w-2/3 px-3">
         <Input
           label="Title : "
+          type="text"
           placeholder="Blog Title"
           className="mb-4"
           {...register("title", { required: true })}
@@ -91,21 +96,16 @@ function PostForm({ post }: { post?: any }) {
         <Input
           label="Slug : "
           className="mb-4"
-          {...register("slug", { required: true })}
-          onInput={(e) => {
+          type="text"
+          onInput={(e: any) => {
             setValue("slug", slugTransform(e.currentTarget.value), {
               shouldValidate: true,
             });
           }}
-        />
-        <RTE
-          label="Content : "
-          name="content"
-          control={control}
-          defaultValue={getValues("content")}
+          {...register("slug", { required: true })}
         />
       </div>
-      <div className="w-1/3 px-2">
+      <div className="w-full md:w-1/3 px-3">
         <Input
           label="Thumbnail"
           type="file"
@@ -114,6 +114,14 @@ function PostForm({ post }: { post?: any }) {
           {...register("image", { required: !post })}
         />
         {post && <div></div>}
+      </div>
+      <div className="w-full px-3">
+        <RTE
+          label="Content : "
+          name="content"
+          control={control}
+          defaultValue={getValues("content")}
+        />
       </div>
     </form>
   );

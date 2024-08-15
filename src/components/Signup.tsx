@@ -13,7 +13,7 @@ function Signup() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit } = useForm();
-  const authStatus: boolean = useSelector((state) => state?.auth.isLoggedIn);
+  const authStatus: boolean = useSelector((state: any) => state?.auth.isLoggedIn);
 
   useEffect(() => {
     if (authStatus) {

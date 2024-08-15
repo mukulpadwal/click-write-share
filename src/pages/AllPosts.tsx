@@ -6,23 +6,23 @@ function AllPosts() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    databaseService.getBlogs([]).then((posts) => {
+    databaseService.getBlogs([]).then((posts: any) => {
       if (posts) {
-        setPosts(posts.documents);
+        setPosts(posts?.documents);
       }
     });
   }, []);
 
   return (
-    <div className="py-8">
+    <div>
       <Container>
         <div className="flex flex-wrap">
-          {posts.map((post) => (
-            <div key={post.$id} className="p-2 w-1/4">
+          {posts.map((post: any) => (
+            <div key={post?.$id} className="p-2 w-1/4">
               <PostCard
-                $id={post.$id}
-                title={post.title}
-                featuredImage={post.thumbnail}
+                $id={post?.$id}
+                title={post?.title}
+                featuredImage={post?.thumbnail}
               />
             </div>
           ))}
