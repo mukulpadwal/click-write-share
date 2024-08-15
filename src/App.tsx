@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import authService from "./appwrite/auth";
+import { login, logout } from "./store/authSlice";
+import { Footer, Header } from "./components";
+import { Outlet } from "react-router-dom";
+import { LoaderPinwheel } from "lucide-react";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  useEffect(() => {
+    authService
+      .getSession()
+      .then((userData) => {
+        if (userData) {
+          dispatch(login({ userData: userData }));
+        } else {
+          dispatch(logout());
+        }
+      })
+      .catch((error) => console.error(error))
+      .finally(() =>
+        setTimeout(() => {
+          setLoading(false);
+        }, 500)
+      );
+  }, []);
+
+  return loading ? (
+    <div className="border min-w-screen min-h-screen flex justify-center items-center">
+      <div className="flex justify-center items-center">
+        <LoaderPinwheel className="h-20 w-20 animate animate-ping text-[#EDC7B7]" />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  ) : (
+    <div className="relative min-w-full min-h-screen">
+      <Header />
+      <main className="w-auto min-h-screen bg-[#EDC7B7] border border-black rounded-lg m-2 shadow-sm shadow-black">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
-export default App
+export default App;
