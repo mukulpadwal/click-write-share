@@ -2,8 +2,8 @@ import { forwardRef, useId } from "react";
 
 interface SelectProps {
   label: string;
-  options: [];
-  className: string;
+  options: string[];
+  className?: string;
 }
 
 function Select(
@@ -13,7 +13,14 @@ function Select(
   const id = useId();
   return (
     <div className="w-full">
-      {label && <label htmlFor={id}>{label}</label>}
+      {label && (
+        <label
+          htmlFor={id}
+          className="inline-block mb-1 pl-1 text-xl font-semibold"
+        >
+          {label}
+        </label>
+      )}
       <select
         ref={ref}
         {...props}

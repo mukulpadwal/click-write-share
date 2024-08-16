@@ -15,14 +15,9 @@ function RTE({
 }) {
   const editor = useRef(null);
   const [content, setContent] = useState("");
-  // const config: { IJoditEditorProps: {} } = {
-  //   placeholder: "Click Write Share. **Warning:** May cause blog addiction...",
-  // };
-
-  console.log(defaultValue)
 
   return (
-    <div>
+    <div className="w-auto">
       {label && (
         <label className="inline-block mb-1 pl-1 text-xl font-semibold">
           {label}
@@ -34,9 +29,8 @@ function RTE({
         render={({ field: { onChange } }) => (
           <JoditEditor
             ref={editor}
-            value={content}
+            value={defaultValue || content}
             onBlur={(newContent) => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-            // config={config}
             onChange={onChange}
           />
         )}

@@ -5,3 +5,13 @@
 .jodit-status-bar-link {
   display: none;
 }
+
+.jodit-workplace {
+  height: 400px !important;
+}
+
+@media  screen and (max-width: 768px) {
+  .jodit-workplace {
+    height: 200px !important;
+  }
+}
