@@ -22,7 +22,7 @@ class DatabaseService {
     // Create a new blog
     async createBlog(slug: string, { title, content, thumbnail, userId, published }: { title: string, content: string, thumbnail: string, userId: string, published: boolean }) {
         try {
-            await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, {
+            return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, {
                 title: title,
                 content: content,
                 thumbnail: thumbnail,

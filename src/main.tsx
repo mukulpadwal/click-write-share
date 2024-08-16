@@ -9,13 +9,17 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Home from "./pages/Home.tsx";
-import Protected from "./components/Protected.tsx";
-import Login from "./pages/Login.tsx";
-import Signup from "./pages/Signup.tsx";
-import AllPosts from "./pages/AllPosts.tsx";
-import AddPost from "./pages/AddPost.tsx";
-import Post from "./pages/Post.tsx";
+
+import {
+  Home,
+  Login,
+  Signup,
+  AllPosts,
+  AddPost,
+  Post,
+  EditPost,
+} from "./pages";
+import { Protected } from "./components";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -53,7 +57,15 @@ const router = createBrowserRouter(
           </Protected>
         }
       />
-      <Route path="/edit-post/:slug" element={<Post />} />
+      <Route
+        path="/edit-post/:slug"
+        element={
+          <Protected authentication={true}>
+            <EditPost />
+          </Protected>
+        }
+      />
+      <Route path="/post/:slug" element={<Post />} />
     </Route>
   )
 );

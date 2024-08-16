@@ -9,18 +9,20 @@ function Home() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const authStatus = useSelector((state: any) => state?.auth.isLoggedIn);
+  const authData = useSelector((state: any) => state.auth.userData);
 
   useEffect(() => {
     databaseService
       .getBlogs([])
       .then((posts: any) => {
-        if (posts.total > 0) {
-          setPosts(posts.documents);
-        }
+        const filteredPosts = posts.documents.filter(
+          (post: any) => post.userId === authData.userId
+        );
+        setPosts(filteredPosts);
       })
       .catch((error) => console.error(error.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [authData]);
 
   return authStatus ? (
     loading ? (
@@ -42,7 +44,7 @@ function Home() {
         <Container>
           <div className="flex-flex-wrap">
             {posts.map((post: any) => (
-              <div key={post.$id} className="p-2 w-1/4">
+              <div key={post.$id} className="p-2 w-full md:w-1/4">
                 <PostCard
                   $id={post?.$id}
                   title={post?.title}
@@ -70,7 +72,7 @@ function Home() {
             </h2>
             <Link
               to={"/login"}
-              className="w-full lg:w-1/2 font-normal text-center text-white rounded-xl bg-[#AC3B61] hover:bg-inherit hover:text-black hover:border hover:border-[#AC3B61] py-2 px-2"
+              className="w-full lg:w-1/2 font-medium text-center text-white rounded-xl bg-[#AC3B61] py-2 px-2"
             >
               Start Writing...
             </Link>

@@ -55,7 +55,7 @@ function PostForm({ blog }: { blog?: any }) {
         const dbPost: any = await databaseService.createBlog(data.slug, {
           ...data,
           published: Boolean(data.published),
-          userId: userData.$id,
+          userId: userData.userId,
         });
 
         if (dbPost !== undefined) {

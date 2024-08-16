@@ -13,7 +13,9 @@ function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const authStatus: boolean = useSelector((state: any) => state?.auth.isLoggedIn);
+  const authStatus: boolean = useSelector(
+    (state: any) => state?.auth.isLoggedIn
+  );
 
   const handleLogin = async (data: any) => {
     setError("");
@@ -97,12 +99,12 @@ function Login() {
           />
           <Button
             type="submit"
-            className="w-full hover:bg-inherit hover:text-black hover:border hover:border-[#AC3B61]"
+            className="w-full"
             bgColor={"bg-[#AC3B61]"}
             disabled={loading}
           >
             {loading ? (
-              <Loader2 className="text-center animate animate-spin w-full text-white hover:text-black" />
+              <Loader2 className="text-center animate animate-spin w-full text-white" />
             ) : (
               "Sign In"
             )}
