@@ -7,6 +7,7 @@ function Button({
   textColor = "text-white",
   className = "",
   disabled,
+  onClick,
   ...props
 }: {
   children: React.ReactNode;
@@ -15,12 +16,18 @@ function Button({
   textColor?: string;
   className?: string;
   disabled?: boolean;
+  onClick?: Function;
 }) {
   return (
     <button
       disabled={disabled}
       className={`px-4 py-2 rounded-lg ${bgColor} ${textColor} ${className}`}
       {...props}
+      onClick={() => {
+        if (onClick) {
+          onClick();
+        }
+      }}
     >
       {children}
     </button>

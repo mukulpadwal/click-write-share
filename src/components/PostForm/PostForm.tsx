@@ -30,7 +30,7 @@ function PostForm({ blog }: { blog?: any }) {
         : null;
 
       if (thumbnail) {
-        await storageService.deleteThumbnail(blog.thumbnail);
+        await storageService.deleteThumbnail({ fileId: blog.thumbnail });
       }
 
       const dbPost = await databaseService.editBlog(blog.$id, {
@@ -122,7 +122,7 @@ function PostForm({ blog }: { blog?: any }) {
               <div>
                 <img
                   src={storageService
-                    .previewThumbnail(blog.thumbnail)
+                    .previewThumbnail({ fileId: blog.thumbnail })
                     .toString()}
                   alt={blog.title}
                 />
