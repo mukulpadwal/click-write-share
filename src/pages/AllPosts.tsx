@@ -28,10 +28,13 @@ function AllPosts() {
           </div>
         </div>
       ) : (
-        <div className="w-auto">
-          <Container className="flex flex-wrap">
+        <div className="w-auto h-full m-4 p-2 flex flex-col justify-center items-center gap-2">
+          <h1 className="w-auto text-center text-2xl sm:text-3xl font-bold">
+            All Blogs
+          </h1>
+          <Container className="rounded-xl my-4 w-auto flex flex-wrap flex-row justify-center items-start gap-4">
             {posts.map((post: any) => (
-              <div key={post?.$id} className="p-2 w-full md:w-1/4">
+              <div key={post?.$id} className="w-80">
                 <PostCard
                   $id={post?.$id}
                   title={post?.title}

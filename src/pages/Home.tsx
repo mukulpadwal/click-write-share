@@ -40,19 +40,21 @@ function Home() {
         </div>
       </Container>
     ) : (
-      <div className="w-full py-8">
-        <Container>
-          <div className="flex-flex-wrap">
-            {posts.map((post: any) => (
-              <div key={post.$id} className="p-2 w-full md:w-1/4">
-                <PostCard
-                  $id={post?.$id}
-                  title={post?.title}
-                  featuredImage={post?.thumbnail}
-                />
-              </div>
-            ))}
-          </div>
+      <div className="w-auto h-full m-4 p-2 flex flex-col justify-center items-center gap-2">
+        <h1 className="w-auto text-center text-xl sm:text-3xl font-bold">
+          Welcome <span className="underline underline-offset-2">{authData.providerUid}</span>!!! 
+        </h1>
+        <h2 className="w-auto text-center text-lg sm:text-2xl font-semibold">Your Blogs</h2>
+        <Container className="rounded-xl my-4 w-auto flex flex-wrap flex-row justify-center items-start gap-4">
+          {posts.map((post: any) => (
+            <div key={post.$id} className="w-80">
+              <PostCard
+                $id={post?.$id}
+                title={post?.title}
+                featuredImage={post?.thumbnail}
+              />
+            </div>
+          ))}
         </Container>
       </div>
     )

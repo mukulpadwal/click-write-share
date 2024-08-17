@@ -12,17 +12,17 @@ function PostCard({
 }) {
   return (
     <Link to={`/post/${$id}`}>
-      <div className="w-full bg-gray-100 rounded-xl p-4">
-        <div className="w-full justify-center mb-4">
+      <div className="w-auto h-full bg-[#EEE2DC] rounded-xl p-4 flex flex-col justify-between">
+        <div className="w-full min-h-60 sm:min-h-80 border border-[#AC3B61]/50 mb-4 rounded-xl flex flex-row justify-center items-center">
           <img
             src={storageService
               .previewThumbnail({ fileId: featuredImage })
               .toString()}
             alt={title}
-            className="rounded-xl"
+            className="rounded-xl bg-current max-h-60 sm:max-h-80 text-center"
           />
         </div>
-        <h2 className="text-xl font-bold">{title}</h2>
+        <h3 className="text-xl font-bold">{title}</h3>
       </div>
     </Link>
   );

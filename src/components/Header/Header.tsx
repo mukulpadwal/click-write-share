@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { Container, Logo, LogoutBtn } from "../";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { MenuSquare, X } from "lucide-react";
 
 function Header() {
   const [mobileMenuClicked, setMobileMenuClicked] = useState<boolean>(false);
-  const authStatus: boolean = useSelector((state: any) => state?.auth?.isLoggedIn);
+  const authStatus: boolean = useSelector(
+    (state: any) => state?.auth?.isLoggedIn
+  );
   const navigate = useNavigate();
 
   const navItems = [
@@ -48,17 +50,20 @@ function Header() {
           </div>
 
           <div className="hidden sm:block ">
-            <ul className="flex flex-wrap flex-row gap-3">
+            <ul className="flex flex-wrap flex-row items-center justify-center gap-3">
               {navItems.map((item) =>
                 item.active ? (
-                  <li key={item.name}>
-                    <button
-                      onClick={() => navigate(item.slug)}
-                      className="inline-bock px-6 py-2 duration-200 hover:bg-[#AC3B61] hover:text-white rounded-full"
-                    >
-                      {item.name}
-                    </button>
-                  </li>
+                  <NavLink
+                    key={item.name}
+                    to={item.slug}
+                    className={({ isActive }) =>
+                      isActive
+                        ? "decoration-[#AC3B61] underline underline-offset-4 inline-bock px-6 py-2"
+                        : "px-6 py-2"
+                    }
+                  >
+                    {item.name}
+                  </NavLink>
                 ) : null
               )}
               {authStatus && (
