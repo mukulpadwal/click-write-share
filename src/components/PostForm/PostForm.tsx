@@ -1,17 +1,20 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { RTE, Input, Select, Button } from "../";
 import databaseService from "../../appwrite/database";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import storageService from "../../appwrite/storage";
+import { Eye, Loader2 } from "lucide-react";
 
 function PostForm({ blog }: { blog?: any }) {
+  const [submitting, setSubmitting] = useState(false);
+
   const { register, handleSubmit, watch, setValue, control, getValues } =
     useForm({
       defaultValues: {
         title: blog?.title || "",
-        slug: blog?.slug || "",
+        slug: blog?.$id || "",
         content: blog?.content || "",
         published: blog?.published || true,
         thumbnail: blog?.thumbnail || "",
@@ -22,46 +25,54 @@ function PostForm({ blog }: { blog?: any }) {
   const userData = useSelector((state: any) => state?.auth?.userData);
 
   const handleBlogSubmit = async (data: any) => {
-    // Here we have 2 cases
-    if (blog !== undefined) {
-      // Case 1 : The user wants to edit the current Blog
-      const thumbnail = data.thumbnail[0]
-        ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
-        : null;
+    setSubmitting(true);
 
-      if (thumbnail) {
-        await storageService.deleteThumbnail({ fileId: blog.thumbnail });
-      }
+    try {
+      // Here we have 2 cases
+      if (blog !== undefined) {
+        // Case 1 : The user wants to edit the current Blog
+        const thumbnail = data.thumbnail[0]
+          ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
+          : null;
 
-      const dbPost = await databaseService.editBlog(blog.$id, {
-        ...data,
-        published: Boolean(data.published),
-        thumbnail: thumbnail ? thumbnail.$id : undefined,
-      });
+        if (thumbnail) {
+          await storageService.deleteThumbnail({ fileId: blog.thumbnail });
+        }
 
-      if (dbPost) {
-        navigate(`/post/${dbPost.$id}`);
-      }
-    } else {
-      // Case 2 : The user is creating a new blog
-      const thumbnail = data.thumbnail[0]
-        ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
-        : null;
-
-      if (thumbnail) {
-        const thumbnailId = thumbnail.$id;
-        data.thumbnail = thumbnailId;
-
-        const dbPost: any = await databaseService.createBlog(data.slug, {
+        const dbPost = await databaseService.editBlog(blog.$id, {
           ...data,
           published: Boolean(data.published),
-          userId: userData.userId,
+          thumbnail: thumbnail ? thumbnail.$id : undefined,
         });
 
-        if (dbPost !== undefined) {
-          navigate(`/post/${dbPost?.$id}`);
+        if (dbPost) {
+          navigate(`/post/${dbPost.$id}`);
+        }
+      } else {
+        // Case 2 : The user is creating a new blog
+        const thumbnail = data.thumbnail[0]
+          ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
+          : null;
+
+        if (thumbnail) {
+          const thumbnailId = thumbnail.$id;
+          data.thumbnail = thumbnailId;
+
+          const dbPost: any = await databaseService.createBlog(data.slug, {
+            ...data,
+            published: Boolean(data.published),
+            userId: userData.userId,
+          });
+
+          if (dbPost !== undefined) {
+            navigate(`/post/${dbPost?.$id}`);
+          }
         }
       }
+    } catch (error: any) {
+      console.error(error.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -88,7 +99,7 @@ function PostForm({ blog }: { blog?: any }) {
   return (
     <form
       onSubmit={handleSubmit(handleBlogSubmit)}
-      className="w-auto h-auto mx-3"
+      className="w-auto h-auto m-2 p-2"
     >
       <div className="w-auto flex flex-col gap-4">
         <div className="w-auto flex flex-col sm:flex-row gap-2 sm:gap-0">
@@ -112,22 +123,37 @@ function PostForm({ blog }: { blog?: any }) {
             />
           </div>
           <div className="w-full flex flex-col justify-center items-center gap-4 h-auto px-3">
-            <Input
-              label="Thumbnail : "
-              type="file"
-              accept="image/png, image/jpg, image/jpeg, image/gif"
-              {...register("thumbnail", { required: !blog })}
-            />
-            {blog && (
-              <div>
-                <img
-                  src={storageService
-                    .previewThumbnail({ fileId: blog.thumbnail })
-                    .toString()}
-                  alt={blog.title}
-                />
-              </div>
-            )}
+            <div className="w-full flex flex-col sm:flex-row sm:justify-center sm:items-end gap-4 sm:gap-1">
+              <Input
+                label="Thumbnail* : "
+                type="file"
+                accept="image/png, image/jpg, image/jpeg, image/gif"
+                {...register("thumbnail", { required: !blog })}
+              />
+              {blog && (
+                <div className="w-full sm:w-2/12 lg:w-1/12 flex flex-row justify-center items-center">
+                  <div className="sm:hidden">
+                    <img
+                      src={storageService
+                        .previewThumbnail({ fileId: blog.thumbnail })
+                        .toString()}
+                      alt={blog.title}
+                    />
+                  </div>
+                  <div className="hidden sm:block" title="Preview Thumbnail...">
+                    <Link
+                      to={storageService
+                        .previewThumbnail({ fileId: blog.thumbnail })
+                        .toString()}
+                      target="_blank"
+                    >
+                      <Eye className="h-10 w-10 text-[#AC3B61]" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <Select
               options={["true", "false"]}
               label="Published Status : "
@@ -145,8 +171,35 @@ function PostForm({ blog }: { blog?: any }) {
           />
         </div>
         <div className="w-full px-3 text-center my-2">
-          <Button type="submit" bgColor="bg-[#AC3B61]" className="w-full">
-            {blog ? "Update" : "Publish"}
+          <Button
+            type="submit"
+            bgColor="bg-[#AC3B61]"
+            className="w-full"
+            disabled={submitting}
+          >
+            {blog ? (
+              <>
+                {submitting ? (
+                  <div className="flex flex-row justify-center items-center gap-2">
+                    <Loader2 className="animate animate-spin h-5 w-5" />
+                    Updating...
+                  </div>
+                ) : (
+                  "Update"
+                )}
+              </>
+            ) : (
+              <>
+                {submitting ? (
+                  <div className="flex flex-row justify-center items-center gap-2">
+                    <Loader2 className="animate animate-spin h-5 w-5" />
+                    Publishing...
+                  </div>
+                ) : (
+                  "Publish"
+                )}
+              </>
+            )}
           </Button>
         </div>
       </div>

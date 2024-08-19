@@ -83,10 +83,10 @@ function Post() {
             className="rounded-xl w-auto"
           />
         </div>
-        <div className="w-auto">
-          <h1 className="text-5xl font-bold">{post.title}</h1>
+        <div className="p-4 w-full flex flex-col justify-center items-start gap-4">
+          <h1 className="text-3xl md:text-5xl font-bold">{post.title}</h1>
+          <p className="w-auto">{parse(post.content)}</p>
         </div>
-        <p className="w-auto">{parse(post.content)}</p>
       </Container>
     </div>
   );

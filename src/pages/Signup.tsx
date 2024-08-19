@@ -1,11 +1,7 @@
 import { Signup as SignupComponent } from "../components";
 
 function Signup() {
-  return (
-    <>
-      <SignupComponent />
-    </>
-  );
+  return <SignupComponent />;
 }
 
 export default Signup;

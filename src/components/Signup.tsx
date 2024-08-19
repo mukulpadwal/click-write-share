@@ -13,7 +13,9 @@ function Signup() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
   const { register, handleSubmit } = useForm();
-  const authStatus: boolean = useSelector((state: any) => state?.auth.isLoggedIn);
+  const authStatus: boolean = useSelector(
+    (state: any) => state?.auth.isLoggedIn
+  );
 
   useEffect(() => {
     if (authStatus) {
@@ -108,11 +110,12 @@ function Signup() {
             />
             <Button
               type="submit"
-              className="w-full hover:bg-inherit hover:text-black hover:border hover:border-[#AC3B61]"
+              className="w-full"
               bgColor={"bg-[#AC3B61]"}
+              disabled={loading}
             >
               {loading ? (
-                <Loader2 className="text-center animate animate-spin w-full" />
+                <Loader2 className="text-center animate animate-spin w-full text-white" />
               ) : (
                 "Sign Up"
               )}
