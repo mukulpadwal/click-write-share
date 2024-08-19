@@ -1,22 +1,16 @@
 import { useEffect, useState } from "react";
-import databaseService from "../appwrite/database";
-import { Container, PostCard } from "../components";
+import { Container, BlogCard } from "../components";
 import { LoaderPinwheel } from "lucide-react";
+import { useSelector } from "react-redux";
 
-function AllPosts() {
-  const [posts, setPosts] = useState([]);
+function AllBlogs() {
   const [loading, setLoading] = useState(true);
+  const blogs = useSelector((state: any) => state.blog.blogs);
 
   useEffect(() => {
-    databaseService
-      .getBlogs([])
-      .then((posts: any) => {
-        if (posts.total > 0) {
-          setPosts(posts.documents);
-        }
-      })
-      .catch((error) => console.error(error.message))
-      .finally(() => setLoading(false));
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
   }, []);
 
   return (
@@ -33,9 +27,9 @@ function AllPosts() {
             All Blogs
           </h1>
           <Container className="rounded-xl my-4 w-auto flex flex-wrap flex-row justify-center items-start gap-4">
-            {posts.map((post: any) => (
+            {blogs.map((post: any) => (
               <div key={post?.$id} className="w-80">
-                <PostCard
+                <BlogCard
                   $id={post?.$id}
                   title={post?.title}
                   featuredImage={post?.thumbnail}
@@ -49,4 +43,4 @@ function AllPosts() {
   );
 }
 
-export default AllPosts;
+export default AllBlogs;

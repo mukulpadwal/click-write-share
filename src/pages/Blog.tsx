@@ -7,7 +7,7 @@ import { Button, Container } from "../components";
 import storageService from "../appwrite/storage";
 import parse from "html-react-parser";
 
-function Post() {
+function Blog() {
   const [post, setPost] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
@@ -55,7 +55,7 @@ function Post() {
         <div className="relative w-full flex flex-col items-center justify-center gap-2">
           {isAuthor && (
             <div className="w-full md:w-auto flex flex-row items-center justify-center gap-2 md:absolute md:top-0 md:right-0">
-              <Link className="w-1/2 md:w-auto" to={`/edit-post/${post.$id}`}>
+              <Link className="w-1/2 md:w-auto" to={`/edit-blog/${post.$id}`}>
                 <Button bgColor="w-full md:w-auto bg-green-500">Edit</Button>
               </Link>
               <Button
@@ -92,4 +92,4 @@ function Post() {
   );
 }
 
-export default Post;
+export default Blog;

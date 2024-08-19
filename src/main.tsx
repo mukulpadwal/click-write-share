@@ -14,10 +14,10 @@ import {
   Home,
   Login,
   Signup,
-  AllPosts,
-  AddPost,
-  Post,
-  EditPost,
+  AllBlogs,
+  AddBlog,
+  Blog,
+  EditBlog,
 } from "./pages";
 import { Protected } from "./components";
 
@@ -42,30 +42,30 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="/all-posts"
+        path="/all-blogs"
         element={
           <Protected authentication={true}>
-            <AllPosts />
+            <AllBlogs />
           </Protected>
         }
       />
       <Route
-        path="/add-post"
+        path="/add-blog"
         element={
           <Protected authentication={true}>
-            <AddPost />
+            <AddBlog />
           </Protected>
         }
       />
       <Route
-        path="/edit-post/:slug"
+        path="/edit-blog/:slug"
         element={
           <Protected authentication={true}>
-            <EditPost />
+            <EditBlog />
           </Protected>
         }
       />
-      <Route path="/post/:slug" element={<Post />} />
+      <Route path="/blog/:slug" element={<Blog />} />
     </Route>
   )
 );

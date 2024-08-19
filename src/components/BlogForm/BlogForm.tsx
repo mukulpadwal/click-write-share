@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { RTE, Input, Select, Button } from "../";
+import { RTE, Input, Select, Button } from "..";
 import databaseService from "../../appwrite/database";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import storageService from "../../appwrite/storage";
 import { Eye, Loader2 } from "lucide-react";
+import { addBlog } from "../../store/blogSlice";
 
-function PostForm({ blog }: { blog?: any }) {
+function BlogForm({ blog }: { blog?: any }) {
   const [submitting, setSubmitting] = useState(false);
 
   const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -22,31 +23,34 @@ function PostForm({ blog }: { blog?: any }) {
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state: any) => state?.auth?.userData);
+  const dispatch = useDispatch();
+  const userData = useSelector((state: any) => state.auth.userData);
 
   const handleBlogSubmit = async (data: any) => {
     setSubmitting(true);
 
     try {
-      // Here we have 2 cases
       if (blog !== undefined) {
         // Case 1 : The user wants to edit the current Blog
-        const thumbnail = data.thumbnail[0]
-          ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
-          : null;
+        let thumbnail = undefined;
+        if (typeof data.thumbnail === "object") {
+          thumbnail = data?.thumbnail[0]
+            ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
+            : null;
 
-        if (thumbnail) {
-          await storageService.deleteThumbnail({ fileId: blog.thumbnail });
+          if (thumbnail) {
+            await storageService.deleteThumbnail({ fileId: blog.thumbnail });
+          }
         }
 
-        const dbPost = await databaseService.editBlog(blog.$id, {
+        const editedBlog = await databaseService.editBlog(blog.$id, {
           ...data,
           published: Boolean(data.published),
-          thumbnail: thumbnail ? thumbnail.$id : undefined,
+          thumbnail: thumbnail ? thumbnail.$id : data.thumbnail,
         });
 
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`);
+        if (editedBlog !== undefined) {
+          navigate(`/blog/${editedBlog.$id}`);
         }
       } else {
         // Case 2 : The user is creating a new blog
@@ -58,14 +62,15 @@ function PostForm({ blog }: { blog?: any }) {
           const thumbnailId = thumbnail.$id;
           data.thumbnail = thumbnailId;
 
-          const dbPost: any = await databaseService.createBlog(data.slug, {
+          const newBlog: any = await databaseService.createBlog(data.slug, {
             ...data,
             published: Boolean(data.published),
             userId: userData.userId,
           });
 
-          if (dbPost !== undefined) {
-            navigate(`/post/${dbPost?.$id}`);
+          if (newBlog !== undefined) {
+            dispatch(addBlog({ blog: newBlog }));
+            navigate(`/blog/${newBlog?.$id}`);
           }
         }
       }
@@ -207,4 +212,4 @@ function PostForm({ blog }: { blog?: any }) {
   );
 }
 
-export default PostForm;
+export default BlogForm;

@@ -1,9 +1,9 @@
-import AddPost from "./AddPost";
-import AllPosts from "./AllPosts";
-import EditPost from "./EditPost";
+import AddBlog from "./AddBlog";
+import AllBlogs from "./AllBlogs";
+import Blog from "./Blog";
+import EditBlog from "./EditBlog";
 import Home from "./Home";
 import Login from "./Login";
-import Post from "./Post";
 import Signup from "./Signup";
 
-export { AddPost, AllPosts, EditPost, Home, Login, Post, Signup }
+export { AddBlog, AllBlogs, Blog, EditBlog, Home, Login, Signup }

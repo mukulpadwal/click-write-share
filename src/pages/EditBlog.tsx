@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Container, PostForm } from "../components";
+import { Container, BlogForm } from "../components";
 import databaseService from "../appwrite/database";
 import { useNavigate, useParams } from "react-router-dom";
 import { LoaderPinwheel } from "lucide-react";
 
-function EditPost() {
+function EditBlog() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const { slug } = useParams();
@@ -35,10 +35,10 @@ function EditPost() {
   ) : (
     <div>
       <Container>
-        <PostForm blog={post} />
+        <BlogForm blog={post} />
       </Container>
     </div>
   );
 }
 
-export default EditPost;
+export default EditBlog;

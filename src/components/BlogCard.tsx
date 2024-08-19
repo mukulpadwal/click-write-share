@@ -1,7 +1,7 @@
 import storageService from "../appwrite/storage";
 import { Link } from "react-router-dom";
 
-function PostCard({
+function BlogCard({
   $id,
   title,
   featuredImage,
@@ -11,7 +11,7 @@ function PostCard({
   featuredImage?: any;
 }) {
   return (
-    <Link to={`/post/${$id}`}>
+    <Link to={`/blog/${$id}`}>
       <div className="w-auto h-full bg-[#EEE2DC] rounded-xl p-4 flex flex-col justify-between">
         <div className="w-full min-h-60 sm:min-h-80 border border-[#AC3B61]/50 mb-4 rounded-xl flex flex-row justify-center items-center">
           <img
@@ -28,4 +28,4 @@ function PostCard({
   );
 }
 
-export default PostCard;
+export default BlogCard;
