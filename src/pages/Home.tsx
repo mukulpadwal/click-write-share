@@ -52,7 +52,7 @@ function Home() {
           Your Blogs
         </h2>
         <Container className="rounded-xl my-4 w-auto flex flex-wrap flex-row justify-center items-start gap-4">
-          {userBlogs.map((post: any) => (
+          {userBlogs?.map((post: any) => (
             <div key={post.$id} className="w-80">
               <BlogCard
                 $id={post?.$id}

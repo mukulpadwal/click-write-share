@@ -7,10 +7,12 @@ function AllBlogs() {
   const [loading, setLoading] = useState(true);
   const blogs = useSelector((state: any) => state.blog.blogs);
 
+  console.log(blogs);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 100);
+    }, 500);
   }, []);
 
   return (
@@ -27,7 +29,7 @@ function AllBlogs() {
             All Blogs
           </h1>
           <Container className="rounded-xl my-4 w-auto flex flex-wrap flex-row justify-center items-start gap-4">
-            {blogs.map((post: any) => (
+            {blogs?.map((post: any) => (
               <div key={post?.$id} className="w-80">
                 <BlogCard
                   $id={post?.$id}
