@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { Container, BlogCard } from "../components";
 import { LoaderPinwheel } from "lucide-react";
-import { useSelector } from "react-redux";
+import databaseService from "../appwrite/database";
 
 function AllBlogs() {
   const [loading, setLoading] = useState(true);
-  const blogs = useSelector((state: any) => state.blog.blogs);
+  const [blogs, setBlogs] = useState<[]>([]);
 
   console.log(blogs);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    databaseService
+      .getBlogs()
+      .then((blogs: any) => setBlogs(blogs.documents))
+      .catch((error) => console.error(error.message))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
