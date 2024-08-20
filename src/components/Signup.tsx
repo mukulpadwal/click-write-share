@@ -6,6 +6,7 @@ import { Button, Container, Input, Logo } from "./";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 function Signup() {
   const [error, setError] = useState("");
@@ -28,16 +29,23 @@ function Signup() {
     setLoading(true);
     try {
       const userData = await authService.signup(data);
-      if (userData) {
-        const userData = await authService.getSession();
 
-        if (userData) {
-          dispatch(login({ userData }));
+      if (userData !== undefined) {
+        const userSession = await authService.getSession();
+
+        if (userSession) {
+          dispatch(login({ userData: userSession }));
+          toast.success("Account Created Successfully...");
+          setTimeout(() => {}, 100);
           navigate("/");
         }
+      } else {
+        toast.error(
+          "Looks like email is already taken. Try with some other one..."
+        );
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.log(error);
     } finally {
       setLoading(false);
     }

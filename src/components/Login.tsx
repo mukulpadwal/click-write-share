@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import authService from "../appwrite/auth";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 function Login() {
   const navigate = useNavigate();
@@ -24,14 +25,17 @@ function Login() {
       const session = await authService.login(data);
       if (session) {
         const userData = await authService.getSession();
-        console.log(userData);
         if (userData) {
           dispatch(authLogin({ userData }));
-          navigate("/");
+          toast.success("Login Success...");
+          setTimeout(() => {
+            navigate("/");
+          }, 500);
         }
       }
     } catch (error: any) {
       setError(error.message);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

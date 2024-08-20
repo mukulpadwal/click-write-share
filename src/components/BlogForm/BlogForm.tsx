@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import storageService from "../../appwrite/storage";
 import { Eye, Loader2 } from "lucide-react";
 import { addBlog } from "../../store/blogSlice";
+import toast from "react-hot-toast";
 
 function BlogForm({ blog }: { blog?: any }) {
   const [submitting, setSubmitting] = useState(false);
@@ -30,47 +31,51 @@ function BlogForm({ blog }: { blog?: any }) {
     setSubmitting(true);
 
     try {
-      if (blog !== undefined) {
-        // Case 1 : The user wants to edit the current Blog
-        let thumbnail = undefined;
-        if (typeof data.thumbnail === "object") {
-          thumbnail = data?.thumbnail[0]
+      if (validateData(data)) {
+        if (blog !== undefined) {
+          // Case 1 : The user wants to edit the current Blog
+          let thumbnail = undefined;
+          if (typeof data.thumbnail === "object") {
+            thumbnail = data?.thumbnail[0]
+              ? await storageService.uploadThumbnail({
+                  file: data.thumbnail[0],
+                })
+              : null;
+
+            if (thumbnail) {
+              await storageService.deleteThumbnail({ fileId: blog.thumbnail });
+            }
+          }
+
+          const editedBlog = await databaseService.editBlog(blog.$id, {
+            ...data,
+            published: Boolean(data.published),
+            thumbnail: thumbnail ? thumbnail.$id : data.thumbnail,
+          });
+
+          if (editedBlog !== undefined) {
+            navigate(`/blog/${editedBlog.$id}`);
+          }
+        } else {
+          // Case 2 : The user is creating a new blog
+          const thumbnail = data.thumbnail[0]
             ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
             : null;
 
           if (thumbnail) {
-            await storageService.deleteThumbnail({ fileId: blog.thumbnail });
-          }
-        }
+            const thumbnailId = thumbnail.$id;
+            data.thumbnail = thumbnailId;
 
-        const editedBlog = await databaseService.editBlog(blog.$id, {
-          ...data,
-          published: Boolean(data.published),
-          thumbnail: thumbnail ? thumbnail.$id : data.thumbnail,
-        });
+            const newBlog: any = await databaseService.createBlog(data.slug, {
+              ...data,
+              published: Boolean(data.published),
+              userId: userData.userId,
+            });
 
-        if (editedBlog !== undefined) {
-          navigate(`/blog/${editedBlog.$id}`);
-        }
-      } else {
-        // Case 2 : The user is creating a new blog
-        const thumbnail = data.thumbnail[0]
-          ? await storageService.uploadThumbnail({ file: data.thumbnail[0] })
-          : null;
-
-        if (thumbnail) {
-          const thumbnailId = thumbnail.$id;
-          data.thumbnail = thumbnailId;
-
-          const newBlog: any = await databaseService.createBlog(data.slug, {
-            ...data,
-            published: Boolean(data.published),
-            userId: userData.userId,
-          });
-
-          if (newBlog !== undefined) {
-            dispatch(addBlog({ blog: newBlog }));
-            navigate(`/blog/${newBlog?.$id}`);
+            if (newBlog !== undefined) {
+              dispatch(addBlog({ blog: newBlog }));
+              navigate(`/blog/${newBlog?.$id}`);
+            }
           }
         }
       }
@@ -79,6 +84,32 @@ function BlogForm({ blog }: { blog?: any }) {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const validateData = (data: any) => {
+    const { title, published, thumbnail, content } = data;
+    const regex = /^[a-zA-Z0-9][a-zA-Z0-9._\- ]{0,35}$/;
+    if (regex.test(title) === false) {
+      toast.error(
+        "Valid chars for title are a-z, A-Z, 0-9, period, hyphen, and underscore. Can't start with a special char..."
+      );
+      return false;
+    } else if (published === undefined) {
+      toast.error(
+        "Make sure that the published status is selected to wither true or false..."
+      );
+      return false;
+    } else if (thumbnail === undefined) {
+      toast.error("Kindly upload a valid thumbnail...");
+      return false;
+    } else if (content.length > 20000) {
+      toast.error(
+        `Make sure that length of content is equal to or less than 20000 characters... Current length ${content.length}`
+      );
+      return false;
+    }
+
+    return true;
   };
 
   const slugTransform = useCallback((value: string) => {

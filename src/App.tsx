@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import authService from "./appwrite/auth";
 import { login, logout } from "./store/authSlice";
-import { allBlogs } from "./store/blogSlice";
 import { Footer, Header } from "./components";
 import { Outlet } from "react-router-dom";
 import { LoaderPinwheel } from "lucide-react";
-import databaseService from "./appwrite/database";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,22 +29,6 @@ function App() {
       );
   }, []);
 
-  useEffect(() => {
-    databaseService
-      .getBlogs()
-      .then((blogsData: any) => {
-        if (blogsData.documents.length > 0) {
-          dispatch(allBlogs({ blogsData: blogsData.documents }));
-        }
-      })
-      .catch((error) => console.error(error))
-      .finally(() =>
-        setTimeout(() => {
-          setLoading(false);
-        }, 500)
-      );
-  }, []);
-
   return loading ? (
     <div className="border min-w-screen min-h-screen flex justify-center items-center">
       <div className="flex justify-center items-center">
@@ -54,6 +37,7 @@ function App() {
     </div>
   ) : (
     <div className="relative min-w-full min-h-screen">
+      <Toaster />
       <Header />
       <main className="w-auto min-h-screen bg-[#EDC7B7] border border-black rounded-lg m-2 shadow-sm shadow-black">
         <Outlet />

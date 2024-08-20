@@ -3,25 +3,29 @@ import { Container, Logo, BlogCard } from "../components";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { LoaderPinwheel } from "lucide-react";
+import databaseService from "../appwrite/database";
 
 function Home() {
   const [userBlogs, setUserBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const authStatus = useSelector((state: any) => state.auth.isLoggedIn);
   const authData = useSelector((state: any) => state.auth.userData);
-  const blogsData = useSelector((state: any) => state.blog.blogs);
 
   useEffect(() => {
-    try {
-      const filteredBlogs = blogsData.filter(
-        (post: any) => post.userId === authData.userId
-      );
-      setUserBlogs(filteredBlogs);
-    } catch (error: any) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
-    }
+    databaseService
+      .getBlogs()
+      .then((blogs: any) => {
+        if (blogs.documents.length > 0) {
+          const filteredBlogs = blogs.documents.filter(
+            (blog: any) => blog.userId === authData.userId
+          );
+          setUserBlogs(filteredBlogs);
+        }
+      })
+      .catch((error: any) => {
+        console.error(error.message);
+      })
+      .finally(() => setLoading(false));
   }, [authData]);
 
   return authStatus ? (
@@ -35,7 +39,7 @@ function Home() {
       <Container className="min-w-full min-h-screen flex flex-row items-center justify-center">
         <div className="w-full flex flex-wrap flex-col sm:flex-row justify-around items-center">
           <div className="flex flex-col justify-center items-center">
-            <h1 className="text-3xl font-bold">No posts to show...</h1>
+            <h1 className="text-3xl font-bold">No blogs to show...</h1>
           </div>
         </div>
       </Container>
