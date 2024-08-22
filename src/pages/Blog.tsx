@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import databaseService from "../appwrite/database";
 import { Loader2, LoaderPinwheel } from "lucide-react";
-import { Button, Container } from "../components";
+import { Button, Container, ShareButton } from "../components";
 import storageService from "../appwrite/storage";
 import parse from "html-react-parser";
+import conf from "../conf/conf";
 
 function Blog() {
   const [post, setPost] = useState<any>();
@@ -87,6 +88,9 @@ function Blog() {
           <h1 className="text-3xl md:text-5xl font-bold">{post.title}</h1>
           <p className="w-auto">{parse(post.content)}</p>
         </div>
+        <ShareButton
+          shareUrl={`${conf.developmentURL || conf.productionURL}/blog/${slug}`}
+        />
       </Container>
     </div>
   );

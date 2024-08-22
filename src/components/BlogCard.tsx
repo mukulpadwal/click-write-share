@@ -28,7 +28,7 @@ function BlogCard({
           <h3 className="text-xl font-bold text-center">{title}</h3>
         </div>
       </Link>
-      <ShareButton shareUrl={`${conf.productionURL}/blog/${$id}`} />
+      <ShareButton shareUrl={`${conf.developmentURL || conf.productionURL}/blog/${$id}`} />
     </div>
   );
 }
