@@ -11,6 +11,7 @@ import Login from "./Login";
 import Protected from "./Protected";
 import RTE from "./RTE";
 import Select from "./Select";
+import ShareButton from "./ShareButton";
 import Signup from "./Signup";
 
-export { Button, BlogCard, BlogForm, Container, Footer, Header, Input, Logo, LogoutBtn, Login, Protected, RTE, Select, Signup };
+export { Button, BlogCard, BlogForm, Container, Footer, Header, Input, Logo, LogoutBtn, Login, Protected, RTE, Select, ShareButton, Signup };
