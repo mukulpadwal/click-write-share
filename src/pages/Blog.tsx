@@ -89,7 +89,7 @@ function Blog() {
           <p className="w-auto">{parse(post.content)}</p>
         </div>
         <ShareButton
-          shareUrl={`${conf.developmentURL || conf.productionURL}/blog/${slug}`}
+          shareUrl={`${conf.productionURL}/blog/${slug}`}
         />
       </Container>
     </div>
