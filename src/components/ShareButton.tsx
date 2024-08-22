@@ -16,7 +16,6 @@ import {
 } from "react-share";
 
 function ShareButton({ shareUrl }: { shareUrl: string }) {
-  console.log(shareUrl);
   return (
     <div className="flex flex-row flex-wrap justify-start items-center gap-2 p-1">
       <EmailShareButton url={shareUrl}>
