@@ -9,7 +9,6 @@ import {
   RedditShareButton,
   TelegramIcon,
   TelegramShareButton,
-  TwitterIcon,
   TwitterShareButton,
   WhatsappIcon,
   WhatsappShareButton,
@@ -35,9 +34,6 @@ function ShareButton({ shareUrl }: { shareUrl: string }) {
       <TelegramShareButton url={shareUrl}>
         <TelegramIcon size={32} round={true} />
       </TelegramShareButton>
-      <TwitterShareButton url={shareUrl}>
-        <TwitterIcon size={32} round={true} />
-      </TwitterShareButton>
       <WhatsappShareButton url={shareUrl}>
         <WhatsappIcon size={32} round={true} />
       </WhatsappShareButton>
