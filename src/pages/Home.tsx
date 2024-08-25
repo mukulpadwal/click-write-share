@@ -82,12 +82,21 @@ function Home() {
             <h2 className="text-lg lg:text-2xl italic font-semibold">
               From blank page to the world
             </h2>
-            <Link
-              to={"/login"}
-              className="w-full lg:w-1/2 font-medium text-center text-white rounded-xl bg-[#AC3B61] py-2 px-2"
-            >
-              Start Writing...
-            </Link>
+            <div className="w-full flex flex-col md:flex-row gap-2">
+              <Link
+                to={"/login"}
+                className="w-full lg:w-1/2 font-medium text-center text-white rounded-xl bg-[#AC3B61] py-2 px-2"
+              >
+                Start Writing...
+              </Link>
+              <Link
+                to={"/all-blogs"}
+                className="w-full lg:w-1/2 font-medium text-center text-black rounded-xl border border-[#AC3B61] py-2 px-2"
+              >
+                Read...
+              </Link>
+            </div>
+
             <span>
               <strong>Warning:</strong> May cause blog addiction
             </span>

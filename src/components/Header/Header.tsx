@@ -18,6 +18,11 @@ function Header() {
       active: true,
     },
     {
+      name: "All Blogs",
+      slug: "/all-blogs",
+      active: authStatus,
+    },
+    {
       name: "Login",
       slug: "/login",
       active: !authStatus,
@@ -26,11 +31,6 @@ function Header() {
       name: "Signup",
       slug: "/signup",
       active: !authStatus,
-    },
-    {
-      name: "All Blogs",
-      slug: "/all-blogs",
-      active: authStatus,
     },
     {
       name: "Add Blog",
