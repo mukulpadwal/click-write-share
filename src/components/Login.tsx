@@ -70,6 +70,12 @@ function Login() {
           </div>
         </div>
 
+        <div className="w-full flex flex-col items-start justify-center gap-2 border border-black/10 rounded-xl p-2">
+          <h2 className="font-bold text-base">Use these test credentials to explore the app.</h2>
+          <p className="text-sm"><span className="font-semibold">Email : </span> test@test.com</p>
+          <p className="text-sm"><span className="font-semibold">Password : </span> Test@123</p>
+        </div>
+
         {error && (
           <p className="text-red-600 text-center border border-black/10 rounded-xl p-2">
             {error}
